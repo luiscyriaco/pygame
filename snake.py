@@ -28,7 +28,7 @@ pontos = 0
 fonte = pygame.font.SysFont('arial', 20, True, True) # Fonte do texto que será exibido na tela(tipo, tamanho, negrito, italico, etc)
 
 tela = pygame.display.set_mode((largura, altura))
-pygame.display.set_caption('Jogo')  # Opcional: título da janela
+pygame.display.set_caption('SNAKE')  # Opcional: título da janela
 relogio = pygame.time.Clock() # Objeto que irá orientar a velocidade do jogo
 lista_cobra = []
 comprimento_inicial = 5 # Comprimento inicial da cobra
@@ -36,7 +36,7 @@ fim_jogo = False  # Variável para controlar o fim do jogo
 
 def aumenta_cobra(lista_cobra):
     for xey in lista_cobra:
-        pygame.draw.rect(tela, (0,255,0), (xey[0], xey[1], 20, 20))
+        pygame.draw.rect(tela, (100, 150, 75), (xey[0], xey[1], 20, 20))
 
 
 def reiniciar_jogo():
@@ -92,8 +92,8 @@ while True:
     x_cobra += x_controle  # Atualiza a posição do objeto no eixo X
     y_cobra += y_controle  # Atualiza a posição do objeto no eixo Y 
 
-    cobra = pygame.draw.rect(tela, (0,255,0),(x_cobra,y_cobra,20,20)) #Quadrado - (tela,(R,G,B),(x,y,largura,altura))
-    maca = pygame.draw.rect(tela, (255,0,0),(x_maca,y_maca,20,20)) #Quadrado - (tela,(R,G,B),(x,y,largura,altura))
+    cobra = pygame.draw.rect(tela, (100, 150, 75),(x_cobra,y_cobra,20,20)) #Quadrado - (tela,(R,G,B),(x,y,largura,altura))
+    maca = pygame.draw.rect(tela, (255, 100, 100),(x_maca,y_maca,20,20)) #Quadrado - (tela,(R,G,B),(x,y,largura,altura))
 
     if cobra.colliderect(maca):
         x_maca = randint(40, 600)  # Após a colizão reposiciona o retângulo azul aleatoriamente
@@ -112,7 +112,7 @@ while True:
         fonte2 = pygame.font.SysFont('arial', 15, True, True) # Fonte do texto que será exibido na tela(tipo, tamanho, negrito, italico, etc)
         mensagem_fim = 'Fim de Jogo! Pressione R para reiniciar'
         texto_fim = fonte2.render(mensagem_fim, True, (0,0,0))
-        ret_texto = texto_formatado.get_rect() # Cria um retângulo para o texto formatado
+        ret_texto = texto_fim.get_rect() # Cria um retângulo para o texto formatado
         fim_jogo = True
         while fim_jogo:
             tela.fill((255,255,255)) # Limpa a tela
@@ -123,8 +123,18 @@ while True:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
                         reiniciar_jogo()
-            tela.blit(texto_fim, (largura//2, altura//2))  # Desenha o texto de fim de jogo no centro da tela
+            ret_texto.center = (largura//2, altura//2) # Centraliza o retângulo do texto formatado na tela
+            tela.blit(texto_fim, ret_texto) # Desenha o texto formatado na tela
             pygame.display.update() # Atualiza a tela
+    
+    if x_cobra > largura:
+        x_cobra = 0
+    if x_cobra < 0:
+        x_cobra = largura
+    if y_cobra > altura:
+        y_cobra = 0
+    if y_cobra < 0:
+        y_cobra = altura
                       
     if len(lista_cobra) > comprimento_inicial:  # Se o comprimento da cobra for maior que o comprimento inicial
         del lista_cobra[0]
@@ -132,5 +142,5 @@ while True:
     aumenta_cobra(lista_cobra)  # Chama a função que desenha a cobra na tela
 
 
-    tela.blit(texto_formatado, (520, 40))  # Desenha o texto formatado na tela na posição (10, 10)
+    tela.blit(texto_formatado, (530, 10))  # Desenha o texto formatado na tela na posição (10, 10)
     pygame.display.update() # Atualiza o conteúdo da tela
